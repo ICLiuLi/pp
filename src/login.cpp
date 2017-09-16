@@ -4,6 +4,8 @@
 
 #include "manager.h"
 
+#include "icon.h"
+
 #include <QLineEdit>
 #include <QLabel>
 #include <QPushButton>
@@ -13,24 +15,21 @@
 namespace pp {
 
 struct login::Private {
-    //QHBoxLayout unLayout;
     QLineEdit username;
     QLabel un;
 
-    //QHBoxLayout pwLayout;
     QLineEdit password;
     QLabel pw;
 
-    //QHBoxLayout loginLayout;
     QPushButton loginIn;
-    QPushButton signUp;
-    QPushButton forgetPW;
+    QPushButton login_out;
     //QVBoxLayout mainLayout;
 
 };
 login::login(QWidget *parent)noexcept
-    : super(LOGIN_WINDOW,parent) {
+    : super(LOGIN_WINDOW, parent) {
     impl = new Private;
+    this->setObjectName("login");
     init();
 }
 
@@ -39,72 +38,72 @@ login::~login() noexcept {
 }
 
 void login::init() noexcept {
+    // ç½‘ç»œåˆå§‹åŒ–
     client::init();
 
-    setObjectName("login");
+    {// init layout
+        auto mainLayout = new QVBoxLayout{ this };
+        mainLayout->setMargin(ui::login::layoutMargin);
+        mainLayout->addWidget(&impl->un, Qt::AlignLeft);
+        mainLayout->addWidget(&impl->username);
+        mainLayout->addWidget(&impl->pw, Qt::AlignLeft);
+        mainLayout->addWidget(&impl->password);
+        mainLayout->addStretch(1);
+        mainLayout->addLayout([=]() {
+            auto loginLayout = new QHBoxLayout;
+            loginLayout->addWidget(&impl->loginIn);
+            loginLayout->addWidget(&impl->login_out);
+            return loginLayout;
+        }());
+    }
 
-    impl->un.setText(QString::fromUtf16(u"ÓÃ»§Ãû"));
-    impl->pw.setText(QString::fromUtf16(u"ÃÜÂë"));
-
-    impl->loginIn.setText(QString::fromUtf16(u"µÇÂ¼"));
-    impl->signUp.setText(QString::fromUtf16(u"×¢²á"));
-    impl->forgetPW.setText(QString::fromUtf16(u"Íü¼ÇÃÜÂë"));
+    {// setting model
+        impl->password.setEchoMode(QLineEdit::Password);
+        ///todo ç•Œé¢å­—ç¬¦ä»Žconfigè¯»å–
+        impl->un.setText(QString::fromUtf16(u"<h1>:account</h1>"));
+        impl->pw.setText(QString::fromUtf16(u"<h1>:password</h1>"));
 
 #if 0
-    this->setLayout(&impl->mainLayout);
-    impl->mainLayout.addLayout(&impl->unLayout);
-    impl->mainLayout.addLayout(&impl->pwLayout);
-    impl->mainLayout.addLayout(&impl->loginLayout);
-
-    impl->unLayout.addWidget(&impl->un);
-    impl->unLayout.addWidget(&impl->username);
-    impl->pwLayout.addWidget(&impl->pw);
-    impl->pwLayout.addWidget(&impl->password);
-
-    impl->loginLayout.addWidget(&impl->signUp);
-    impl->loginLayout.addWidget(&impl->loginIn);
-    impl->loginLayout.addWidget(&impl->forgetPW);
+        auto pixmap = QPixmap("./icon/icon/ok_normal.png");
+        impl->loginIn.setIconSize(pixmap.size());
+        impl->loginIn.setIcon({ pixmap });
+        impl->loginIn.setProperty("IconBackground", true);
 #else
-    auto mainLayout = new QVBoxLayout{ this };
-    auto unLayout = new QHBoxLayout;
-    auto pwLayout = new QHBoxLayout;
-    auto loginLayout = new QHBoxLayout;
+        impl->loginIn.setFixedSize({ ui::login::iconWidth,
+                                   ui::login::iconHeight });
+        impl->loginIn.setObjectName("login_in");
 
-    mainLayout->addLayout(unLayout);
-    mainLayout->addLayout(pwLayout);
-    mainLayout->addLayout(loginLayout);
-
-    unLayout->addWidget(&impl->un);
-    unLayout->addWidget(&impl->username);
-    pwLayout->addWidget(&impl->pw);
-    pwLayout->addWidget(&impl->password);
-
-    loginLayout->addWidget(&impl->signUp);
-    loginLayout->addWidget(&impl->loginIn);
-    loginLayout->addWidget(&impl->forgetPW);
+        impl->login_out.setFixedSize({ ui::login::iconWidth,
+                                     ui::login::iconHeight });
+        impl->login_out.setObjectName("login_out");
 #endif
-
+    }
     connect(&impl->loginIn, &QPushButton::clicked,
             this, [=]() {
-        // ÍøÂç³õÊ¼»¯
+        auto username = impl->username.text().trimmed();
+        auto password = impl->password.text();
 
-        manager::openFriends();
+
+        ///ç‚¹å‡»ç™»å½•
     });
-
+    connect(&impl->login_out, &QPushButton::clicked,
+            this, [=]() {
+        manager::exit();
+    });
     connect(client::getInstance(), &client::loginStatus,
             this, [=](client::LOGIN_STATUS status) {
-        //µÇÂ¼×´Ì¬
-        switch (status)
-        {
+        //ç™»å½•çŠ¶æ€
+        switch (status) {
         case client::LOGIN_STATUS::SUCCESS:
-            //µÇÂ¼³É¹¦
+            //ç™»å½•æˆåŠŸ
             manager::openFriends();
             break;
         default:
             break;
         }
     });
-
+    this->setMinimumSize(ui::login::windowWidth,
+                         ui::login::windowHeight);
 }
 
 }

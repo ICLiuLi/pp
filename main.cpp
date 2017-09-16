@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
     if (f.open(QFile::ReadOnly)) {
         a.setStyleSheet(f.readAll());
     }
+    //启动
     pp::manager::init();
-
     return a.exec();
 }

@@ -4,6 +4,8 @@
 #include "friends.h"
 #include "talk.h"
 
+#include <QApplication>
+
 #include <map>
 #include <vector>
 namespace pp {
@@ -18,6 +20,10 @@ manager::manager(){
     impl->window = std::move(
         std::vector<QWidget*>(window::WINDOW_COUNT, nullptr)
     );
+}
+
+void manager::exit() {
+    QApplication::exit();
 }
 
 manager * manager::getInstance() {

@@ -1,10 +1,12 @@
 
 QWidget{
+	font-family: 'Microsoft YaHei';
 }
 
 pp--login{
-	background:#66ccff;
-    border-radius: 10px;
+	background:#057FBA;
+    border-radius: 20px;
+	border: 5px solid #837F83;
 }
 
 pp--friends{
@@ -12,7 +14,36 @@ pp--friends{
 }
 
 QLabel{
-	color:red;
+	color:#FFFFFF;
+	font-family: 'Microsoft YaHei';
 }
 
+*[ IconBackground ="true"]{
+	border:none;
+	background:transparent;
+}
 
+QPushButton#login_in{
+	border-image:url(./icon/icon/ok_normal.png);
+}
+QPushButton#login_in:hover{
+	border-image:url(./icon/icon/ok_hover.png);
+}
+QPushButton#login_in:pressed{
+	border-image:url(./icon/icon/ok_normal.png);
+}
+
+QPushButton#login_out{
+	border-image:url(./icon/icon/cancel_normal.png);
+}
+QPushButton#login_out:hover{
+	border-image:url(./icon/icon/cancel_hover.png);
+}
+QPushButton#login_out:pressed{
+	border-image:url(./icon/icon/cancel_normal.png);
+}
+
+QLineEdit{
+	font-family: 'Microsoft YaHei';
+	font-size:25px;
+}

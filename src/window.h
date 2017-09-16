@@ -8,11 +8,11 @@ public:
     enum WINDOW_TYPE {
         UNIQUE_WINDOW = 0,
         NORMAL_WINDOW,
-        //唯一窗口
+        //鍞竴绐楀彛
         LOGIN_WINDOW,
         FRIENDS_WINDOW,
 
-        //重复窗口
+        //閲嶅绐楀彛
         TALK_WINDOW,
 
         WINDOW_COUNT,

@@ -11,6 +11,7 @@ private:
 private:
     manager();
 public:
+    static void exit();
     static manager* getInstance();
     static QWidget* openLogin();
     static QWidget* openFriends();
